@@ -5,6 +5,8 @@
 .cache/
 .history/
 .lib/
+.vagrant/*
+.idea/*
 dist/*
 target/
 lib_managed/
