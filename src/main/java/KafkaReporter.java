@@ -1,22 +1,30 @@
-import com.yammer.metrics.core.MetricsRegistry;
-import com.yammer.metrics.reporting.AbstractPollingReporter;
+import com.codahale.metrics.*;
+import kafka.javaapi.producer.Producer;
+import kafka.producer.ProducerConfig;
 
-public class KafkaReporter extends AbstractPollingReporter {
+import java.util.Properties;
+import java.util.SortedMap;
+import java.util.concurrent.TimeUnit;
 
-    /**
-     * Creates a new {@link com.yammer.metrics.reporting.AbstractPollingReporter} instance.
-     *
-     * @param registry the {@link com.yammer.metrics.core.MetricsRegistry} containing the metrics this reporter will
-     *                 report
-     * @param name     the reporter's name
-     * @see AbstractReporter#AbstractReporter(com.yammer.metrics.core.MetricsRegistry)
-     */
-    protected KafkaReporter(MetricsRegistry registry, String name) {
-        super(registry, name);
+public class KafkaReporter extends ScheduledReporter {
+    private Producer<String, String> kafkaProducer;
+
+    protected KafkaReporter(MetricRegistry registry,
+                            String name,
+                            MetricFilter filter,
+                            TimeUnit rateUnit,
+                            TimeUnit durationUnit,
+                            Properties properties) {
+        super(registry, name, filter, rateUnit, durationUnit);
+        kafkaProducer = new Producer<String, String>(new ProducerConfig(properties));
     }
 
     @Override
-    public void run() {
+    public void report(SortedMap<String, Gauge> gauges,
+                       SortedMap<String, Counter> counters,
+                       SortedMap<String, Histogram> histograms,
+                       SortedMap<String, Meter> meters,
+                       SortedMap<String, Timer> timers) {
 
     }
 }
