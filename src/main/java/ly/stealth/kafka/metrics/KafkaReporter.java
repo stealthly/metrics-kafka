@@ -60,13 +60,16 @@ public class KafkaReporter extends ScheduledReporter {
         private int batchSize = 200;
         private int messageSendMaxRetries = 3;
         private int requestRequiredAcks = -1;
+
         private String name = "KafkaReporter";
-        private MetricFilter filter;
-        private TimeUnit rateUnit;
-        private TimeUnit durationUnit;
+        private MetricFilter filter = MetricFilter.ALL;
+        private TimeUnit rateUnit = TimeUnit.SECONDS;
+        private TimeUnit durationUnit = TimeUnit.SECONDS;
 
         public Builder(MetricRegistry registry, String topic, String brokerList) {
             this.registry = registry;
+            this.kafkaTopic = topic;
+            this.brokerList = brokerList;
         }
 
         public String getKafkaTopic() {
@@ -188,13 +191,13 @@ public class KafkaReporter extends ScheduledReporter {
 
         public KafkaReporter build() {
             Properties props = new Properties();
-            props.put("compression.codec", compressionCodec);
             props.put("producer.type", synchronously ? "sync" : "async");
             props.put("metadata.broker.list", brokerList);
-            props.put("batch.num.messages", batchSize);
-            props.put("message.send.max.retries", messageSendMaxRetries);
-            props.put("require.requred.acks",requestRequiredAcks);
+            props.put("batch.num.messages", String.valueOf(batchSize));
+            props.put("message.send.max.retries", String.valueOf(messageSendMaxRetries));
+            props.put("require.requred.acks", String.valueOf(requestRequiredAcks));
             props.put("client.id", clientId);
+            props.put("serializer.class", "kafka.serializer.StringEncoder");
 
             return new KafkaReporter(registry, name, filter, rateUnit, durationUnit, kafkaTopic, props);
         }
