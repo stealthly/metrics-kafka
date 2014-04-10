@@ -196,6 +196,7 @@ public class KafkaReporter extends ScheduledReporter {
             props.put("batch.num.messages", String.valueOf(batchSize));
             props.put("message.send.max.retries", String.valueOf(messageSendMaxRetries));
             props.put("require.requred.acks", String.valueOf(requestRequiredAcks));
+            props.put("compression.codec", compressionCodec);
             props.put("client.id", clientId);
             props.put("serializer.class", "kafka.serializer.StringEncoder");
 
