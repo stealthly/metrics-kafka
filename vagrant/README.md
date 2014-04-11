@@ -7,10 +7,7 @@ Using Vagrant to get up and running.
 
 In the main kafka folder
 
-1) ./sbt update  
-2) ./sbt package  
-3) ./sbt assembly-package-dependency  
-4) vagrant up  
+1) vagrant up
 
 once this is done 
 * Zookeeper will be running 192.168.50.5

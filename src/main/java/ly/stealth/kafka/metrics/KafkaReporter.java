@@ -56,7 +56,7 @@ public class KafkaReporter extends ScheduledReporter {
 
         private String clientId = UUID.randomUUID().toString();
         private boolean synchronously = true;
-        private String compressionCodec = "gzip";
+        private int compressionCodec = 0;
         private int batchSize = 200;
         private int messageSendMaxRetries = 3;
         private int requestRequiredAcks = -1;
@@ -108,11 +108,11 @@ public class KafkaReporter extends ScheduledReporter {
             return this;
         }
 
-        public String getCompressionCodec() {
+        public int getCompressionCodec() {
             return compressionCodec;
         }
 
-        public Builder setCompressionCodec(String compressionCodec) {
+        public Builder setCompressionCodec(int compressionCodec) {
             this.compressionCodec = compressionCodec;
             return this;
         }
@@ -196,7 +196,7 @@ public class KafkaReporter extends ScheduledReporter {
             props.put("batch.num.messages", String.valueOf(batchSize));
             props.put("message.send.max.retries", String.valueOf(messageSendMaxRetries));
             props.put("require.requred.acks", String.valueOf(requestRequiredAcks));
-            props.put("compression.codec", compressionCodec);
+            props.put("compression.codec", String.valueOf(compressionCodec));
             props.put("client.id", clientId);
             props.put("serializer.class", "kafka.serializer.StringEncoder");
 
