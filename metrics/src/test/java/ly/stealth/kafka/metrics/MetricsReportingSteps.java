@@ -49,6 +49,7 @@ public class MetricsReportingSteps {
         Properties props = new Properties();
         props.put("zookeeper.connect", zkConnect);
         props.put("group.id", "groupId");
+        props.put("auto.offset.reset", "smallest");
         return new ConsumerConfig(props);
     }
 

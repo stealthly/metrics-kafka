@@ -1,1 +1,1 @@
-include ':metrics', ':reimann'
+include ':metrics', ':riemann'
