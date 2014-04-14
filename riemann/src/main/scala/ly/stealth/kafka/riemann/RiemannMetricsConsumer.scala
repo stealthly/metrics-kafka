@@ -47,11 +47,8 @@ class RiemannMetricsConsumer(topic: String,
         //TODO: push report to riemann
       } catch {
         case e: Throwable =>
-          if (true) {
-            error("Error processing message, skipping this message: ", e)
-          } else {
-            throw e
-          }
+          error("Error processing message, skipping this message: ", e)
+          throw e
       }
     }
   }
