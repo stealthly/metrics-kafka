@@ -2,26 +2,22 @@ package ly.stealth.kafka.metrics;
 
 import com.codahale.metrics.MetricRegistry;
 import com.google.gson.Gson;
-import kafka.consumer.Consumer;
-import kafka.consumer.ConsumerConfig;
-import kafka.consumer.ConsumerIterator;
-import kafka.consumer.KafkaStream;
+import kafka.consumer.*;
 import kafka.javaapi.consumer.ConsumerConnector;
+import kafka.serializer.DefaultDecoder;
+import kafka.serializer.StringDecoder;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 import static org.junit.Assert.assertNotNull;
 
 public class MetricsReportingSteps {
     private final String zkConnect = "192.168.86.5:2181";
     private final String kafkaConnect = "192.168.86.10:9092";
-    private final String topic = "sandbox";
+    private final String topic = UUID.randomUUID().toString();
     private KafkaReporter kafkaReporter;
 
     @Given("Kafka broker is up and 'metrics' topic is created.")
@@ -48,18 +44,21 @@ public class MetricsReportingSteps {
     private ConsumerConfig createConsumerConfig() {
         Properties props = new Properties();
         props.put("zookeeper.connect", zkConnect);
-        props.put("group.id", "groupId");
+        props.put("group.id", UUID.randomUUID().toString());
         props.put("auto.offset.reset", "smallest");
+        props.put("zookeeper.session.timeout.ms", "30000");
+        props.put("consumer.timeout.ms", "30000");
         return new ConsumerConfig(props);
     }
 
     public String readMessage(ConsumerConnector consumer) {
         Map<String, Integer> topicCountMap = new HashMap<String, Integer>();
         topicCountMap.put(topic, new Integer(1));
-        Map<String, List<KafkaStream<byte[], byte[]>>> consumerMap = consumer.createMessageStreams(topicCountMap);
-        KafkaStream<byte[], byte[]> stream =  consumerMap.get(topic).get(0);
-        ConsumerIterator<byte[], byte[]> it = stream.iterator();
+        KafkaStream<String, String> messageStream = consumer.createMessageStreamsByFilter(new Whitelist(topic),
+                                                                                          1,
+                                                                                          new StringDecoder(null),
+                                                                                          new StringDecoder(null)).get(0);
 
-        return new String(it.next().message());
+        return messageStream.iterator().next().message();
     }
 }

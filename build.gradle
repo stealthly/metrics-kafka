@@ -1,6 +1,5 @@
 subprojects {
     apply plugin:'java'
-    apply plugin:'scala'
 
     repositories {
         mavenCentral()
@@ -40,6 +39,7 @@ project (':metrics') {
 }
 
 project (':riemann') {
+    apply plugin:'scala'
 
     dependencies {
         compile project(':metrics')

@@ -54,12 +54,10 @@ public class KafkaReporter extends ScheduledReporter {
         private String kafkaTopic;
         private String brokerList;
 
-        private String clientId = UUID.randomUUID().toString();
-        private boolean synchronously = true;
+        private boolean synchronously = false;
         private int compressionCodec = 0;
         private int batchSize = 200;
         private int messageSendMaxRetries = 3;
-        private int requestRequiredAcks = -1;
 
         private String name = "KafkaReporter";
         private MetricFilter filter = MetricFilter.ALL;
@@ -87,15 +85,6 @@ public class KafkaReporter extends ScheduledReporter {
 
         public Builder setBrokerList(String brokerList) {
             this.brokerList = brokerList;
-            return this;
-        }
-
-        public String getClientId() {
-            return clientId;
-        }
-
-        public Builder setClientId(String clientId) {
-            this.clientId = clientId;
             return this;
         }
 
@@ -132,15 +121,6 @@ public class KafkaReporter extends ScheduledReporter {
 
         public Builder setMessageSendMaxRetries(int messageSendMaxRetries) {
             this.messageSendMaxRetries = messageSendMaxRetries;
-            return this;
-        }
-
-        public int getRequestRequiredAcks() {
-            return requestRequiredAcks;
-        }
-
-        public Builder setRequestRequiredAcks(int requestRequiredAcks) {
-            this.requestRequiredAcks = requestRequiredAcks;
             return this;
         }
 
@@ -191,14 +171,13 @@ public class KafkaReporter extends ScheduledReporter {
 
         public KafkaReporter build() {
             Properties props = new Properties();
-            props.put("producer.type", synchronously ? "sync" : "async");
             props.put("metadata.broker.list", brokerList);
+            props.put("serializer.class", "kafka.serializer.StringEncoder");
+            props.put("producer.type", synchronously ? "sync" : "async");
+            props.put("compression.codec", String.valueOf(compressionCodec));
             props.put("batch.num.messages", String.valueOf(batchSize));
             props.put("message.send.max.retries", String.valueOf(messageSendMaxRetries));
-            props.put("require.requred.acks", String.valueOf(requestRequiredAcks));
             props.put("compression.codec", String.valueOf(compressionCodec));
-            props.put("client.id", clientId);
-            props.put("serializer.class", "kafka.serializer.StringEncoder");
 
             return new KafkaReporter(registry, name, filter, rateUnit, durationUnit, kafkaTopic, props);
         }
