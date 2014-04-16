@@ -16,9 +16,9 @@ import scala.concurrent.Await
 
 class RiemannMetricsConsumerTestclass extends JUnitSuite {
 
-  val zkConnection: String = "localhost:2181"
-  val kafkaConnection: String = "localhost:9092"
-  val riemannHost: String = "localhost"
+  val zkConnection: String = "192.168.86.5:2181"
+  val kafkaConnection: String = "192.168.86.10:9092"
+  val riemannHost: String = "192.168.50.4"
   val riemannPort: Int = 5555
   val registry = new MetricRegistry()
   val metricName: String = "test_counter"
