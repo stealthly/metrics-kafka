@@ -1,28 +1,32 @@
 package ly.stealth.kafka.metrics;
 
 import com.codahale.metrics.MetricRegistry;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import kafka.consumer.*;
 import kafka.javaapi.consumer.ConsumerConnector;
-import kafka.serializer.DefaultDecoder;
 import kafka.serializer.StringDecoder;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
+import java.io.IOException;
 import java.util.*;
 
 import static org.junit.Assert.assertNotNull;
 
 public class MetricsReportingSteps {
-    private final String zkConnect = "192.168.86.5:2181";
-    private final String kafkaConnect = "192.168.86.10:9092";
+    private final String zkConnect = "localhost:2181";
+    private final String kafkaConnect = "localhost:9092";
     private final String topic = UUID.randomUUID().toString();
     private KafkaReporter kafkaReporter;
+    private MetricRegistry registry;
 
     @Given("Kafka broker is up and 'metrics' topic is created.")
     public void startingKafkaReporterAndCon() {
-        kafkaReporter = KafkaReporter.builder(new MetricRegistry(),
+        registry = new MetricRegistry();
+        registry.counter("test_counter").inc();
+
+        kafkaReporter = KafkaReporter.builder(registry,
                                               kafkaConnect,
                                               topic).build();
     }
@@ -33,11 +37,12 @@ public class MetricsReportingSteps {
     }
 
     @Then("Kafka consumer should be able to read this data.")
-    public void consumerReadsMetrics() {
+    public void consumerReadsMetrics() throws IOException {
         ConsumerConnector consumer = Consumer.createJavaConsumerConnector(createConsumerConfig());
         String message = readMessage(consumer);
         assertNotNull(message);
-        KafkaMetricsReport report = new Gson().fromJson(message, KafkaMetricsReport.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        KafkaMetricsReport report = objectMapper.readValue(message, KafkaMetricsReport.class);
         assertNotNull(report);
     }
 

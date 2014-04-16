@@ -1,16 +1,18 @@
 package ly.stealth.kafka.metrics;
 
 import com.codahale.metrics.*;
-import com.google.gson.Gson;
+import com.codahale.metrics.json.MetricsModule;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Properties;
 import java.util.SortedMap;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class KafkaReporter extends ScheduledReporter {
@@ -18,7 +20,8 @@ public class KafkaReporter extends ScheduledReporter {
 
     private final Producer<String, String> kafkaProducer;
     private final String kafkaTopic;
-    private final Gson mapper = new Gson();
+    private final ObjectMapper mapper;
+    private final MetricRegistry registry;
 
     private KafkaReporter(MetricRegistry registry,
                           String name,
@@ -28,6 +31,10 @@ public class KafkaReporter extends ScheduledReporter {
                           String kafkaTopic,
                           Properties kafkaProperties) {
         super(registry, name, filter, rateUnit, durationUnit);
+        this.registry = registry;
+        mapper = new ObjectMapper().registerModule(new MetricsModule(rateUnit,
+                                                                     durationUnit,
+                                                                     false));
         this.kafkaTopic = kafkaTopic;
         kafkaProducer = new Producer<String, String>(new ProducerConfig(kafkaProperties));
     }
@@ -38,11 +45,16 @@ public class KafkaReporter extends ScheduledReporter {
                                     SortedMap<String, Histogram> histograms,
                                     SortedMap<String, Meter> meters,
                                     SortedMap<String, Timer> timers) {
-        log.info("Trying to report metrics to Kafka kafkaTopic {}", kafkaTopic);
-        String report = mapper.toJson(new KafkaMetricsReport(gauges, counters, histograms, meters, timers));
-        log.debug("Created metrics report: {}", report);
-        kafkaProducer.send(new KeyedMessage<String, String>(kafkaTopic, report));
-        log.info("Metrics were successfully reported to Kafka kafkaTopic {}", kafkaTopic);
+        try {
+            log.info("Trying to report metrics to Kafka kafkaTopic {}", kafkaTopic);
+            StringWriter report = new StringWriter();
+            mapper.writeValue(report, registry);
+            log.debug("Created metrics report: {}", report);
+            kafkaProducer.send(new KeyedMessage<String, String>(kafkaTopic, report.toString()));
+            log.info("Metrics were successfully reported to Kafka kafkaTopic {}", kafkaTopic);
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
     }
 
     public static Builder builder(MetricRegistry registry, String brokerList, String kafkaTopic) {
