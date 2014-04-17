@@ -15,7 +15,7 @@ Use Vagrant to get up and running.
 
 In the main metrics-kafka folder
 
-1) vagrant up
+1) vagrant up    
 2) ./gradlew test
 
 once this is done
