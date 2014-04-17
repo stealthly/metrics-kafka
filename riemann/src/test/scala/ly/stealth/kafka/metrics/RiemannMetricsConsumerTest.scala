@@ -18,7 +18,7 @@ class RiemannMetricsConsumerTestclass extends JUnitSuite {
 
   val zkConnection: String = "192.168.86.5:2181"
   val kafkaConnection: String = "192.168.86.10:9092"
-  val riemannHost: String = "192.168.50.4"
+  val riemannHost: String = "192.168.86.55"
   val riemannPort: Int = 5555
   val registry = new MetricRegistry()
   val metricName: String = "test_counter"

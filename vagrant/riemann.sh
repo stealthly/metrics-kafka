@@ -37,8 +37,23 @@ apt-get -y update
 /bin/echo debconf shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
 apt-get -y install oracle-java7-installer oracle-java7-set-default
 
-/vagrant/vagrant/kafka.sh #install kafka
+chown -R vagrant /opt
 
-/opt/apache/kafka/bin/zookeeper-server-start.sh /opt/apache/kafka/config/zookeeper.properties 1>> /tmp/zk.log 2>> /tmp/zk.log &
+cd /opt
+
+wget http://aphyr.com/riemann/riemann-0.2.4.tar.bz2
+tar xvfj riemann-0.2.4.tar.bz2
+cd riemann-0.2.4
+
+/opt/riemann-0.2.4/bin/riemann /vagrant/config/riemann.config >> /vagrant/config/riemann.log &
+
+apt-get -y install rubygems
+
+gem install bundler
+gem install riemann-client riemann-tools riemann-dash
+
+chown -R vagrant /var/lib/gems/
+
+riemann-dash /vagrant/config/config.rb >> /tmp/riemann-dash.log &
 
 exitscript
