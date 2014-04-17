@@ -9,9 +9,7 @@ Quick up and running
 Use Vagrant to get up and running.
 
 1) Install Vagrant [http://www.vagrantup.com/](http://www.vagrantup.com/)    
-2) Install Virtual Box [https://www.virtualbox.org/](https://www.virtualbox.org/)    
-3) Install Riemann via Vagrant [https://github.com/garethr/riemann-vagrant/] or official instructions [http://riemann.io/quickstart.html]    
-4) Start Riemann    
+2) Install Virtual Box [https://www.virtualbox.org/](https://www.virtualbox.org/)
 
 In the main metrics-kafka folder
 
@@ -21,6 +19,7 @@ In the main metrics-kafka folder
 once this is done
 * Zookeeper will be running 192.168.86.5
 * Broker 1 on 192.168.86.10
+* Riemann on 192.168.86.55
 * All the tests in metrics/src/test/java/* and riemann/src/test/scala/* should pass
 
 If you want you can login to the machines using vagrant ssh <machineName> but you don't need to.

@@ -45,7 +45,7 @@ wget http://aphyr.com/riemann/riemann-0.2.4.tar.bz2
 tar xvfj riemann-0.2.4.tar.bz2
 cd riemann-0.2.4
 
-/opt/riemann-0.2.4/bin/riemann /vagrant/config/riemann.config >> /vagrant/config/riemann.log &
+/opt/riemann-0.2.4/bin/riemann /vagrant/config/riemann.config >> /tmp/riemann.log &
 
 apt-get -y install rubygems
 
