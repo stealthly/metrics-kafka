@@ -8,10 +8,10 @@ Quick up and running
 
 Use Vagrant to get up and running.
 
-1) Install Vagrant [http://www.vagrantup.com/](http://www.vagrantup.com/)
-2) Install Virtual Box [https://www.virtualbox.org/](https://www.virtualbox.org/)
-3) Install Riemann via Vagrant [https://github.com/garethr/riemann-vagrant/] or official instructions [http://riemann.io/quickstart.html]
-4) Start Riemann
+1) Install Vagrant [http://www.vagrantup.com/](http://www.vagrantup.com/)    
+2) Install Virtual Box [https://www.virtualbox.org/](https://www.virtualbox.org/)    
+3) Install Riemann via Vagrant [https://github.com/garethr/riemann-vagrant/] or official instructions [http://riemann.io/quickstart.html]    
+4) Start Riemann    
 
 In the main metrics-kafka folder
 
