@@ -3,7 +3,7 @@ Kafka CodaHale Metrics Reporter + Riemann metrics consumer
 The goals of this repo is to have an end to end working environment to provide the ability for systems (applications
 and infrastructure) to send their metrics/sensor data to Kafka and then to report on that data for both alerts and charts.
 
-More about this project in this blog post [http://allthingshadoop.com/2014/04/18/metrics-kafka/](http://allthingshadoop.com/2014/04/18/metrics-kafka/).    
+More about this project in this blog post [http://allthingshadoop.com/2014/04/18/metrics-kafka/](http://allthingshadoop.com/2014/04/18/metrics-kafka/).
 
 Quick up and running
 ====================
