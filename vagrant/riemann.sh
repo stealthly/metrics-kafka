@@ -47,10 +47,13 @@ cd riemann-0.2.4
 
 /opt/riemann-0.2.4/bin/riemann /vagrant/config/riemann.config >> /tmp/riemann.log &
 
-apt-get -y install rubygems
+apt-add-repository -y ppa:brightbox/ruby-ng
+apt-get -y update
 
-gem install bundler
-gem install riemann-client riemann-tools riemann-dash
+apt-get -y install rubygems
+apt-get -y install ruby1.9.3
+
+gem1.9.3 install riemann-client riemann-tools riemann-dash
 
 chown -R vagrant /var/lib/gems/
 

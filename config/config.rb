@@ -1,8 +1,8 @@
 # Serve HTTP traffic on this port
-set  :bind, "192.168.68.55"
+set  :bind, "192.168.86.55"
 set  :port, 4567
 
-riemann_base = '.'
+riemann_base = '/var/lib/gems/1.9.1/gems/riemann-dash-0.2.8'
 riemann_src = "#{riemann_base}/lib/riemann/dash"
 
 # Add custom controllers in controller/
