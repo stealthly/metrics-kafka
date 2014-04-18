@@ -46,7 +46,7 @@ class RiemannMetricsConsumer(riemannHost: String,
   val metricsDestination = riemannConnectAs[Reliable] to new InetSocketAddress(riemannHost, riemannPort) withValues (host("host")
     | description(descriptionText) | tags(tagList))
 
-  def read[T](onlyOnce: Boolean = false) = {
+  def transfer[T](onlyOnce: Boolean = false) = {
     info("reading on stream now")
     val it = stream.iterator()
     while (it.hasNext) {

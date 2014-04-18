@@ -41,12 +41,22 @@ project (':metrics') {
 project (':riemann') {
     apply plugin:'scala'
 
+    task specs(type: JavaExec, dependsOn: testClasses) {
+        main = 'org.specs2.files'
+        args = ['console']
+        classpath sourceSets.main.runtimeClasspath
+        classpath sourceSets.test.runtimeClasspath
+        classpath configurations.testRuntime
+        classpath configurations.runtime
+    }
+
+    test.dependsOn specs
+
     dependencies {
         compile project(':metrics')
         compile 'org.scala-lang:scala-library:2.10.3'
         compile 'net.benmur:riemann-scala-client_2.10:0.3.1'
 
-        testCompile 'junit:junit:4.1'
-        testCompile 'org.scalatest:scalatest_2.10:1.9.1'
+        testCompile 'org.specs2:specs2_2.10:2.2.2'
     }
 }
