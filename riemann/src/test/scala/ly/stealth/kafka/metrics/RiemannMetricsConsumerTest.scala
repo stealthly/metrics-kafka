@@ -34,7 +34,7 @@ class RiemannMetricsConsumerTestclass extends JUnitSuite {
     val producer = KafkaReporter.builder(registry, kafkaConnection, testTopic).build()
     producer.report()
 
-    val consumer = new RiemannMetricsConsumer(riemannHost, riemannPort, "basic description", "kafka", testTopic, groupId_1, zkConnection)
+    val consumer = new RiemannMetricsConsumer(riemannHost, riemannPort, "basic description", "kafka", testTopic, groupId_1, zkConnection, 30000)
     consumer.read(true)
 
     assertRiemann()

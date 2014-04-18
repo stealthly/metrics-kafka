@@ -21,6 +21,7 @@ class RiemannMetricsConsumer(riemannHost: String,
                              topic: String,
                              groupId: String,
                              zookeeperConnect: String,
+                             zkSessionTimeoutMs: Int,
                              readFromStartOfStream: Boolean = true,
                              stateMatcher: (String, Double) => String = null,
                              defaultState: String = "info") extends Logging {
@@ -28,6 +29,7 @@ class RiemannMetricsConsumer(riemannHost: String,
   props.put("group.id", groupId)
   props.put("zookeeper.connect", zookeeperConnect)
   props.put("auto.offset.reset", if (readFromStartOfStream) "smallest" else "largest")
+  props.put("zookeeper.session.timeout.ms", zkSessionTimeoutMs.toString)
 
   val config = new ConsumerConfig(props)
   val connector = Consumer.create(config)
