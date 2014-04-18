@@ -60,7 +60,7 @@ class RiemannMetricsConsumerSpec extends Specification with Logging {
   "Riemann users" should {
     "be able to query metrics, written with RiemannMetricsConsumer, from Riemann" in {
       implicit val system = ActorSystem()
-      implicit val timeout = Timeout(5)
+      implicit val timeout = Timeout(30)
       val metricsDestination = riemannConnectAs[Reliable] to new InetSocketAddress(riemannHost, riemannPort)
       val future = metricsDestination ask Query("tagged \"kafka\"")
       Await.ready(future, Duration.Inf)
