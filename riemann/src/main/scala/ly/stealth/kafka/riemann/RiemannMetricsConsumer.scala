@@ -21,7 +21,7 @@ class RiemannMetricsConsumer(riemannHost: String,
                              topic: String,
                              groupId: String,
                              zookeeperConnect: String,
-                             zkSessionTimeoutMs: Int,
+                             zkSessionTimeoutMs: Int = 30000,
                              readFromStartOfStream: Boolean = true,
                              stateMatcher: (String, Double) => String = null,
                              defaultState: String = "info") extends Logging {
