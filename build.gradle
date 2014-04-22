@@ -60,3 +60,7 @@ project (':riemann') {
         testCompile 'org.specs2:specs2_2.10:2.2.2'
     }
 }
+
+project (':psutil') {
+
+}
