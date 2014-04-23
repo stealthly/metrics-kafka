@@ -1,6 +1,14 @@
+import sys
+import getopt
+import simplejson
+import time
+
 from kafka.client import KafkaClient
 from kafka.producer import SimpleProducer, Producer
-import kafka.producer, kafka.client, sys, getopt, psutil, json, time
+import kafka.producer
+import kafka.client
+import psutil
+
 
 def main(argv):
     try:
@@ -14,7 +22,7 @@ def main(argv):
                                   settings.batchSize,
                                   settings.batchTimeout)
         while True:
-            metricsConfiguration = json.load(open(settings.configLocation))
+            metricsConfiguration = simplejson.load(open(settings.configLocation))
             report = {}
             for metric in metricsConfiguration:
                 metricName = metric['name']
@@ -27,17 +35,14 @@ def main(argv):
                     if type(metricCallable) is None:
                         pass
 
-                    result = apply(metricCallable, arguments)
-                    if type(result) is object:
-                        report[metricName] = result.__dict__
-                    else:
-                        report[metricName] = result
+                    report[metricName] = apply(metricCallable, arguments)
 
-            producer.send_messages(settings.topic, json.dumps(report))
+            producer.send_messages(settings.topic, simplejson.dumps(report))
             time.sleep(settings.reportInterval)
     except getopt.GetoptError:
         print "usage: --url <url> --topic <topic> [--configLocation <path>] [--reportInterval <seconds>] [--async <true|false>] [--sendInBatch <true|false>] [--batchSize <numeric>] [--batchTimeout <numeric>]"
         sys.exit(2)
+
 
 class OptionsConfiguration:
     url = ''
@@ -50,7 +55,9 @@ class OptionsConfiguration:
     reportInterval = 15
 
     def __init__(self, argv):
-        opts, args = getopt.getopt(argv, "", ["url=", "topic=", "configLocation=", "reportInterval=", "async", "sendInBatch", "batchSize=", "batchTimeout="])
+        opts, args = getopt.getopt(argv, "",
+                                   ["url=", "topic=", "configLocation=", "reportInterval=", "async", "sendInBatch",
+                                    "batchSize=", "batchTimeout="])
         for option, arg in opts:
             if option == '--url':
                 self.url = arg
