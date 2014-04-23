@@ -18,14 +18,13 @@
 
 import java.util.UUID
 import com.codahale.metrics.MetricRegistry
-import ly.stealth.kafka.riemann.RiemannMetricsConsumer
+import ly.stealth.kafka.riemann.CodaHaleMetricsConsumer
 import java.net.InetSocketAddress
 import net.benmur.riemann.client._
 import RiemannClient._
 import akka.actor.ActorSystem
 import akka.util.Timeout
 import scala.concurrent.duration.Duration
-import java.util.concurrent.TimeUnit
 import scala.concurrent.Await
 import org.specs2.mutable._
 import kafka.utils.Logging
@@ -63,7 +62,7 @@ class RiemannMetricsConsumerSpec extends Specification with Logging {
       val groupId = UUID.randomUUID().toString
       var success = true
       try {
-        val consumer = new RiemannMetricsConsumer(riemannHost, riemannPort, "basic description", "kafka", topic, groupId, zkConnection, 30000)
+        val consumer = new CodaHaleMetricsConsumer(riemannHost, riemannPort, "basic description", "kafka", topic, groupId, zkConnection, 30000)
         consumer.transfer(true)
       } catch {
         case e: Exception => success = false
