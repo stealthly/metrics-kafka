@@ -1,3 +1,4 @@
+import os
 import sys
 import getopt
 import simplejson
@@ -10,19 +11,26 @@ import kafka.client
 import psutil
 
 
-def main(argv):
-    try:
-        settings = OptionsConfiguration(argv)
-        kafka = KafkaClient(settings.url)
-        producer = SimpleProducer(kafka,
-                                  settings.async,
-                                  Producer.ACK_AFTER_LOCAL_WRITE,
-                                  Producer.DEFAULT_ACK_TIMEOUT,
-                                  settings.sendInBatch,
-                                  settings.batchSize,
-                                  settings.batchTimeout)
+class PsutilsKafkaProducer:
+    def __init__(self, url, topic,
+                 configLocation=os.path.dirname(os.path.realpath(__file__)) + os.sep + 'config.json',
+                 reportInterval=15,
+                 async=False,
+                 sendInBatch=False,
+                 batchSize=kafka.producer.BATCH_SEND_MSG_COUNT,
+                 batchTimeout=kafka.producer.BATCH_SEND_DEFAULT_INTERVAL):
+        self.topic = topic
+        self.configLocation = configLocation
+        self.reportInterval = reportInterval
+
+        kafka = KafkaClient(url)
+        self.producer = SimpleProducer(kafka, async, Producer.ACK_AFTER_LOCAL_WRITE,
+                                       Producer.DEFAULT_ACK_TIMEOUT, sendInBatch, batchSize,
+                                       batchTimeout)
+
+    def start(self):
         while True:
-            metricsConfiguration = simplejson.load(open(settings.configLocation))
+            metricsConfiguration = simplejson.load(open(self.configLocation))
             report = {}
             for metric in metricsConfiguration:
                 metricName = metric['name']
@@ -37,11 +45,11 @@ def main(argv):
 
                     report[metricName] = apply(metricCallable, arguments)
 
-            producer.send_messages(settings.topic, simplejson.dumps(report))
-            time.sleep(settings.reportInterval)
-    except getopt.GetoptError:
-        print "usage: --url <url> --topic <topic> [--configLocation <path>] [--reportInterval <seconds>] [--async <true|false>] [--sendInBatch <true|false>] [--batchSize <numeric>] [--batchTimeout <numeric>]"
-        sys.exit(2)
+            self.producer.send_messages(self.topic, simplejson.dumps(report))
+            time.sleep(self.reportInterval)
+
+    def stop(self):
+        self.producer.stop()
 
 
 class OptionsConfiguration:
@@ -51,7 +59,7 @@ class OptionsConfiguration:
     sendInBatch = False
     batchSize = kafka.producer.BATCH_SEND_MSG_COUNT
     batchTimeout = kafka.producer.BATCH_SEND_DEFAULT_INTERVAL
-    configLocation = 'config.json'
+    configLocation = os.path.dirname(os.path.realpath(__file__)) + os.sep + 'config.json'
     reportInterval = 15
 
     def __init__(self, argv):
@@ -75,6 +83,22 @@ class OptionsConfiguration:
                 self.configLocation = arg
             elif option == 'reportInterval':
                 self.reportInterval = arg
+
+
+def main(argv):
+    try:
+        options = OptionsConfiguration(argv)
+        producer = PsutilsKafkaProducer(options.url, options.topic,
+                                        options.configLocation,
+                                        options.reportInterval,
+                                        options.async,
+                                        options.sendInBatch,
+                                        options.batchSize,
+                                        options.batchTimeout)
+        producer.start()
+    except getopt.GetoptError, e:
+        raise Exception(e)
+
 
 if __name__ == "__main__":
     main(sys.argv[1:])

@@ -51,6 +51,7 @@ project (':riemann') {
     }
 
     test.dependsOn specs
+    test.dependsOn ":psutil:test"
 
     dependencies {
         compile project(':metrics')
@@ -62,5 +63,10 @@ project (':riemann') {
 }
 
 project (':psutil') {
+    task runPython(type:Exec) {
+        workingDir '/'
+        commandLine 'usr/bin/python', "$rootDir/psutil/src/main/python/psutil_producer_test.py"
+    }
 
+    test.dependsOn runPython
 }
