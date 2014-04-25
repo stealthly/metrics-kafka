@@ -63,9 +63,13 @@ project (':riemann') {
 }
 
 project (':psutil') {
+
+    task installDependencies(type:Exec) {
+        commandLine 'sudo', "$rootDir/vagrant/psutil.sh"
+    }
+
     task runPython(type:Exec) {
-        workingDir '/'
-        commandLine 'usr/bin/python', "$rootDir/psutil/src/main/python/psutil_producer_test.py"
+        commandLine '/usr/bin/python', "$rootDir/psutil/src/main/python/psutil_producer_test.py"
     }
 
     test.dependsOn runPython
