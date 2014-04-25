@@ -59,4 +59,19 @@ chown -R vagrant /var/lib/gems/
 
 riemann-dash /vagrant/config/config.rb >> /tmp/riemann-dash.log &
 
+apt-get install -y python-dev
+apt-get install -y python-pip
+apt-get install -y git
+
+pip install psutil
+pip install simplejson
+
+git clone https://github.com/mumrah/kafka-python
+pip install ./kafka-python
+
+python /vagrant/psutil/src/main/python/psutil_producer.py --url 192.168.86.5:9092 --reportInterval 5 --topic psutil-metrics --configLocation /vagrant/psutil/src/main/python/config.json &
+
+#Sometimes Kafka refuses to create topic, so let's try once more
+python /vagrant/psutil/src/main/python/psutil_producer.py --url 192.168.86.5:9092 --reportInterval 5 --topic psutil-metrics --configLocation /vagrant/psutil/src/main/python/config.json &
+
 exitscript

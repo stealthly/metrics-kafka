@@ -2,7 +2,7 @@ package ly.stealth.kafka.riemann
 
 import ly.stealth.kafka.riemann.entities.PsutilsReport
 
-class PsutilsMetricsConsumer(riemannHost: String,
+class PsutilMetricsConsumer(riemannHost: String,
                              riemannPort: Integer,
                              descriptionText: String,
                              tagList: String,

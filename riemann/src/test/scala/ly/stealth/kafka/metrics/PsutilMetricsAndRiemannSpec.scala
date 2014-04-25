@@ -1,7 +1,7 @@
 package ly.stealth.kafka.metrics
 
 import java.util.UUID
-import ly.stealth.kafka.riemann.PsutilsMetricsConsumer
+import ly.stealth.kafka.riemann.PsutilMetricsConsumer
 import akka.actor.ActorSystem
 import akka.util.Timeout
 import net.benmur.riemann.client.RiemannClient._
@@ -26,7 +26,7 @@ class PsutilMetricsAndRiemannSpec extends Specification with Logging {
       val groupId = UUID.randomUUID().toString
       var success = true
       try {
-        val consumer = new PsutilsMetricsConsumer(riemannHost, riemannPort, "basic description", "kafka", psutilTopic, groupId, zkConnection, 30000)
+        val consumer = new PsutilMetricsConsumer(riemannHost, riemannPort, "basic description", "kafka", psutilTopic, groupId, zkConnection, 30000)
         consumer.transfer(true)
       } catch {
         case e: Exception => success = false
