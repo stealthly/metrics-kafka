@@ -1,36 +1,21 @@
-/**
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
- package ly.stealth.kafka.metrics
+package ly.stealth.kafka.metrics
 
 import java.util.UUID
 import com.codahale.metrics.MetricRegistry
-import ly.stealth.kafka.riemann.RiemannMetricsConsumer
+import ly.stealth.kafka.riemann.CodaHaleMetricsConsumer
 import java.net.InetSocketAddress
 import net.benmur.riemann.client._
 import RiemannClient._
 import akka.actor.ActorSystem
 import akka.util.Timeout
 import scala.concurrent.duration.Duration
-import java.util.concurrent.TimeUnit
 import scala.concurrent.Await
 import org.specs2.mutable._
 import kafka.utils.Logging
+import net.benmur.riemann.client.Query
+import java.util.concurrent.TimeUnit
 
-class RiemannMetricsConsumerSpec extends Specification with Logging {
+class CodaHaleMetricsAndRiemannSpec extends Specification with Logging {
 
   val zkConnection: String = "192.168.86.5:2181"
   val kafkaConnection: String = "192.168.86.10:9092"
@@ -43,8 +28,7 @@ class RiemannMetricsConsumerSpec extends Specification with Logging {
 
   "KafkaReporter" should {
     "be able to write metrics to Kafka topic" in {
-      val r = new scala.util.Random
-      counter.inc(10)
+      counter.inc(6)
       
       var success = true
       try {
@@ -57,13 +41,14 @@ class RiemannMetricsConsumerSpec extends Specification with Logging {
       success must beTrue
     }
   }
-  
-  "RiemannMetricsConsumer" should {
-    "be able to transfer metrics from Kafka topic to Riemann" in {      
+
+  "CodaHaleMetricsConsumer" should {
+    "be able to transfer metrics from Kafka topic to Riemann" in {
       val groupId = UUID.randomUUID().toString
       var success = true
       try {
-        val consumer = new RiemannMetricsConsumer(riemannHost, riemannPort, "basic description", "kafka", topic, groupId, zkConnection, 30000)
+        val consumer = new CodaHaleMetricsConsumer(riemannHost, riemannPort, "basic description", "codahale", topic,
+          groupId, zkConnection, 30000)
         consumer.transfer(true)
       } catch {
         case e: Exception => success = false
@@ -74,11 +59,11 @@ class RiemannMetricsConsumerSpec extends Specification with Logging {
   }
 
   "Riemann users" should {
-    "be able to query metrics, written with RiemannMetricsConsumer, from Riemann" in {
+    "be able to query metrics, written with CodaHaleMetricsConsumer, from Riemann" in {
       implicit val system = ActorSystem()
-      implicit val timeout = Timeout(30)
+      implicit val timeout = Timeout(30, TimeUnit.SECONDS)
       val metricsDestination = riemannConnectAs[Reliable] to new InetSocketAddress(riemannHost, riemannPort)
-      val future = metricsDestination ask Query("tagged \"kafka\"")
+      val future = metricsDestination ask Query("tagged \"codahale\"")
       Await.ready(future, Duration.Inf)
       val events = future.value.get.get
 

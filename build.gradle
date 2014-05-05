@@ -51,6 +51,7 @@ project (':riemann') {
     }
 
     test.dependsOn specs
+    test.dependsOn ":psutil:test"
 
     dependencies {
         compile project(':metrics')
@@ -59,4 +60,17 @@ project (':riemann') {
 
         testCompile 'org.specs2:specs2_2.10:2.2.2'
     }
+}
+
+project (':psutil') {
+
+    task installDependencies(type:Exec) {
+        commandLine 'sudo', "$rootDir/vagrant/psutil.sh"
+    }
+
+    task runPython(type:Exec) {
+        commandLine '/usr/bin/python', "$rootDir/psutil/src/main/python/psutil_producer_test.py"
+    }
+
+    test.dependsOn runPython
 }

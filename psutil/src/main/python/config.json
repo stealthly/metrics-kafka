@@ -1,0 +1,70 @@
+[
+    {
+        "name": "cpu_times",
+        "enabled": true,
+        "perCpu": false
+    },
+    {
+        "name": "cpu_percent",
+        "enabled": true,
+        "interval": 1.0
+    },
+    {
+        "name": "cpu_times_percent",
+        "enabled": true,
+        "interval": 1.0,
+        "perCpu": false
+    },
+    {
+        "name": "cpu_count",
+        "enabled": true,
+        "logical": false
+    },
+
+
+    {
+        "name": "virtual_memory",
+        "enabled": true
+    },
+    {
+        "name": "swap_memory",
+        "enabled": true
+    },
+
+
+    {
+        "name": "disk_partitions",
+        "enabled": false
+    },
+    {
+        "name": "disk_usage",
+        "enabled": true,
+        "path": "/"
+    },
+    {
+        "name": "disk_io_counters",
+        "enabled": true,
+        "perDisk": false
+    },
+
+
+    {
+        "name": "net_io_counters",
+        "enabled": true,
+        "pernic": true
+    },
+    {
+        "name": "net_connections",
+        "enabled": true
+    },
+
+
+    {
+        "name": "users",
+        "enabled": true
+    },
+    {
+        "name": "boot_time",
+        "enabled": true
+    }
+]

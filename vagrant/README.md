@@ -3,7 +3,8 @@
 Using Vagrant to get up and running.
 
 1) Install Vagrant [http://www.vagrantup.com/](http://www.vagrantup.com/)  
-2) Install Virtual Box [https://www.virtualbox.org/](https://www.virtualbox.org/)  
+2) Install Virtual Box [https://www.virtualbox.org/](https://www.virtualbox.org/)
+3) gradle :psutil:installDependencies to install psutil dependencies
 
 In the main kafka folder
 
