@@ -41,11 +41,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     brokerOne.vm.provision "shell", path: "vagrant/broker.sh", :args => "1"
   end
 
-  config.vm.define "riemann" do |riemann|
-    riemann.vm.network :private_network, ip: "192.168.86.55"
-    riemann.vm.provider :virtualbox do |vb|
-      vb.customize ["modifyvm", :id, "--memory", "512"]
-    end
-    riemann.vm.provision "shell", path: "vagrant/riemann.sh", :args => "1"
-  end
+  #config.vm.define "riemann" do |riemann|
+  #  riemann.vm.network :private_network, ip: "192.168.86.55"
+  #  riemann.vm.provider :virtualbox do |vb|
+  #    vb.customize ["modifyvm", :id, "--memory", "512"]
+  #  end
+  #  riemann.vm.provision "shell", path: "vagrant/riemann.sh", :args => "1"
+  #end
 end

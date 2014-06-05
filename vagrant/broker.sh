@@ -51,4 +51,6 @@ sed 's/zookeeper.connect=localhost:2181/'zookeeper.connect=192.168.86.5:2181'/' 
 
 /opt/apache/kafka/bin/kafka-server-start.sh /opt/server.properties 1>> /tmp/broker.log 2>> /tmp/broker.log &
 
+/vagrant/vagrant/psutil.sh
+
 exitscript
