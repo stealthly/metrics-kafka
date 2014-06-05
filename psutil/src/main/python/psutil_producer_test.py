@@ -3,6 +3,11 @@ import kafka
 import unittest
 import threading
 import time
+import logging
+
+class NullHandler(logging.Handler):
+    def emit(self, record):
+        pass
 
 class PsutilsKafkaProducerTest(unittest.TestCase):
 
@@ -26,4 +31,5 @@ class PsutilsKafkaProducerTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    logging.getLogger("foo").addHandler(NullHandler())
     unittest.main()
