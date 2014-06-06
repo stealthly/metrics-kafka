@@ -31,5 +31,5 @@ class PsutilsKafkaProducerTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    logging.getLogger("foo").addHandler(NullHandler())
+    logging.getLogger("kafka").addHandler(NullHandler())
     unittest.main()
