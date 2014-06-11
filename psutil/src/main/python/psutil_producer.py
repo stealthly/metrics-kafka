@@ -23,6 +23,7 @@ from kafka.producer import SimpleProducer, Producer
 import kafka.producer
 import kafka.client
 import psutil
+import logging
 
 
 class PsutilsKafkaProducer:
@@ -33,6 +34,8 @@ class PsutilsKafkaProducer:
                  sendInBatch=False,
                  batchSize=kafka.producer.BATCH_SEND_MSG_COUNT,
                  batchTimeout=kafka.producer.BATCH_SEND_DEFAULT_INTERVAL):
+        logging.getLogger("kafka").addHandler(NullHandler())
+
         self.topic = topic
         self.configLocation = configLocation
         self.reportInterval = reportInterval
@@ -41,9 +44,11 @@ class PsutilsKafkaProducer:
         self.producer = SimpleProducer(kafka, async, Producer.ACK_AFTER_LOCAL_WRITE,
                                        Producer.DEFAULT_ACK_TIMEOUT, sendInBatch, batchSize,
                                        batchTimeout)
+        self.failures = 0
+        self.max_failures = 3
 
     def start(self):
-        while True:
+        while True and self.failures <= self.max_failures:
             metricsConfiguration = simplejson.load(open(self.configLocation))
             report = {}
             for metric in metricsConfiguration:
@@ -59,8 +64,15 @@ class PsutilsKafkaProducer:
 
                     report[metricName] = apply(metricCallable, arguments)
 
-            self.producer.send_messages(self.topic, simplejson.dumps(report))
+            try:
+                self.producer.send_messages(self.topic, simplejson.dumps(report))
+            except Exception:
+                self.max_failures += 1
+
             time.sleep(self.reportInterval)
+
+        if self.failures > self.max_failures:
+            raise Exception("Failed to send message")
 
     def stop(self):
         self.producer.stop()
@@ -113,6 +125,10 @@ def main(argv):
     except getopt.GetoptError, e:
         raise Exception(e)
 
+
+class NullHandler(logging.Handler):
+    def emit(self, record):
+        pass
 
 if __name__ == "__main__":
     main(sys.argv[1:])

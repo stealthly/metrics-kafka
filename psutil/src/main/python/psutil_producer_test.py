@@ -17,11 +17,6 @@ import kafka
 import unittest
 import threading
 import time
-import logging
-
-class NullHandler(logging.Handler):
-    def emit(self, record):
-        pass
 
 class PsutilsKafkaProducerTest(unittest.TestCase):
 
@@ -30,20 +25,18 @@ class PsutilsKafkaProducerTest(unittest.TestCase):
         self.topic = "psutil-kafka-topic"
 
         self.producer = PsutilsKafkaProducer(self.url, self.topic, reportInterval=5)
-        self.consumer = kafka.SimpleConsumer(kafka.KafkaClient(self.url), "group1", self.topic)
 
         self.thread = threading.Thread(target=self.producer.start)
         self.thread.daemon = True
 
     def testStart(self):
         self.thread.start()
-        time.sleep(5)
+        time.sleep(15)
         self.producer.stop()
 
-        message = self.consumer.get_message()
+        message = kafka.SimpleConsumer(kafka.KafkaClient(self.url), "group1", self.topic).get_message()
         assert message is not None
 
 
 if __name__ == '__main__':
-    logging.getLogger("kafka").addHandler(NullHandler())
     unittest.main()
