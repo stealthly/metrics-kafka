@@ -10,26 +10,26 @@ Quick up and running
 
 Use Vagrant to get up and running.
 
-1) Install Vagrant [http://www.vagrantup.com/](http://www.vagrantup.com/)    
+1) Install Docker [http://docs.docker.com/installation/](http://docs.docker.com/installation/)
 2) Install Virtual Box [https://www.virtualbox.org/](https://www.virtualbox.org/)
 
 In the main metrics-kafka folder
 
-1) vagrant up    
+1) sudo ./bootstrap.sh
 2) ./gradlew test
+3) sudo ./shutdown.sh
 
 once this is done
-* Zookeeper will be running 192.168.86.5
-* Broker 1 on 192.168.86.10
-* Riemann on 192.168.86.55
+* Zookeeper will be running localhost:2181
+* Broker 1 on localhost:9092
+* Riemann on localhost:5555
+* Riemann dash on localhost:4567
 * All the tests in metrics/src/test/java/* and riemann/src/test/scala/* should pass
 
-If you want you can login to the machines using vagrant ssh <machineName> but you don't need to.
-
-You can access the brokers and zookeeper by their IP from your local without having to go into vm.
+You can access the brokers, zookeeper, riemann and riemann-dash by their IP from your local without having to go into vm.
 
 e.g.
 
-bin/kafka-console-producer.sh --broker-list 192.168.86.10:9092 --topic <get his from the random topic created in test>
+bin/kafka-console-producer.sh --broker-list localhost:9092 --topic <get his from the random topic created in test>
 
-bin/kafka-console-consumer.sh --zookeeper 192.168.86.5:2181 --topic <get his from the random topic created in test> --from-beginning
+bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic <get his from the random topic created in test> --from-beginning
