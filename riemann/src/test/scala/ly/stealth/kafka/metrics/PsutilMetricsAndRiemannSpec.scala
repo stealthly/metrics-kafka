@@ -40,6 +40,9 @@ class PsutilMetricsAndRiemannSpec extends Specification with Logging {
     "be able to query metrics, written with PsutilsMetricsConsumer, from Riemann" in {
       implicit val system = ActorSystem()
       implicit val timeout = Timeout(30, TimeUnit.SECONDS)
+
+      TimeUnit.SECONDS.sleep(5)
+
       val metricsDestination = riemannConnectAs[Reliable] to new InetSocketAddress(riemannHost, riemannPort)
       val cpuFuture = metricsDestination ask Query("tagged \"cpu\"")
       val memoryFuture = metricsDestination ask Query("tagged \"memory\"")

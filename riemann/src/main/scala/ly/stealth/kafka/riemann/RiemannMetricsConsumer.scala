@@ -57,7 +57,7 @@ abstract class RiemannMetricsConsumer(riemannHost: String,
   info("Started consumer: topic=%s for zk=%s and groupId=%s".format(topic, zookeeperConnect, groupId))
 
   implicit val system = ActorSystem()
-  implicit val timeout = Timeout(5)
+  implicit val timeout = Timeout(15)
   val metricsDestination = riemannConnectAs[Reliable] to new InetSocketAddress(riemannHost, riemannPort) withValues (host("host")
     | description(descriptionText) | tags(tagList))
 

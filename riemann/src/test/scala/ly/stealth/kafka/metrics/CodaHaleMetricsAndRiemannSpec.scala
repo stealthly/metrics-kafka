@@ -29,7 +29,7 @@ class CodaHaleMetricsAndRiemannSpec extends Specification with Logging {
   "KafkaReporter" should {
     "be able to write metrics to Kafka topic" in {
       counter.inc(6)
-      
+
       var success = true
       try {
         val producer = KafkaReporter.builder(registry, kafkaConnection, topic).build()
@@ -62,6 +62,9 @@ class CodaHaleMetricsAndRiemannSpec extends Specification with Logging {
     "be able to query metrics, written with CodaHaleMetricsConsumer, from Riemann" in {
       implicit val system = ActorSystem()
       implicit val timeout = Timeout(30, TimeUnit.SECONDS)
+
+      TimeUnit.SECONDS.sleep(5)
+
       val metricsDestination = riemannConnectAs[Reliable] to new InetSocketAddress(riemannHost, riemannPort)
       val future = metricsDestination ask Query("tagged \"codahale\"")
       Await.ready(future, Duration.Inf)
