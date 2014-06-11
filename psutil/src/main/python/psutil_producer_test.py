@@ -26,7 +26,7 @@ class NullHandler(logging.Handler):
 class PsutilsKafkaProducerTest(unittest.TestCase):
 
     def setUp(self):
-        self.url = "192.168.86.10:9092"
+        self.url = "localhost:9092"
         self.topic = "psutil-kafka-topic"
 
         self.producer = PsutilsKafkaProducer(self.url, self.topic, reportInterval=5)

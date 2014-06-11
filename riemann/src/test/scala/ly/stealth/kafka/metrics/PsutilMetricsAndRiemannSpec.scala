@@ -14,9 +14,9 @@ import kafka.utils.Logging
 import java.util.concurrent.TimeUnit
 
 class PsutilMetricsAndRiemannSpec extends Specification with Logging {
-  val zkConnection: String = "192.168.86.5:2181"
-  val kafkaConnection: String = "192.168.86.10:9092"
-  val riemannHost: String = "192.168.86.55"
+  val zkConnection: String = "localhost:2181"
+  val kafkaConnection: String = "localhost:9092"
+  val riemannHost: String = "localhost"
   val riemannPort: Int = 5555
 
   val psutilTopic = "psutil-kafka-topic"
