@@ -62,7 +62,27 @@ project (':riemann') {
     }
 }
 
+project (':metrics-client') {
+    apply plugin: 'scala'
+    apply plugin: 'application'
+
+    mainClassName = "ly.stealth.psutil.PsutilKafka"
+
+    run {
+        args Eval.me("['psutil-kafka-topic','false','false','localhost:9092','localhost','5555','localhost:2181']")
+    }
+
+    dependencies {
+        compile project(":riemann")
+        compile project(":psutil")
+    }
+}
+
 project (':psutil') {
+
+    jar {
+        from 'src/main/python/psutil_producer.py'
+    }
 
     task installDependencies(type:Exec) {
         commandLine 'sudo', "$rootDir/vagrant/psutil.sh"
