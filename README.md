@@ -33,3 +33,7 @@ e.g.
 bin/kafka-console-producer.sh --broker-list localhost:9092 --topic <get his from the random topic created in test>
 
 bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic <get his from the random topic created in test> --from-beginning
+
+http://192.168.86.5:4567/#Riemann
+./gradlew :psutil:installDependencies
+./gradlew :metrics-client:run
