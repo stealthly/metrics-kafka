@@ -69,7 +69,7 @@ project (':metrics-client') {
     mainClassName = "ly.stealth.psutil.PsutilKafka"
 
     run {
-        args Eval.me("['psutil-kafka-topic','false','false','192.168.86.5:9092','192.168.86.5','5555','192.168.86.5:2181']")
+        args Eval.me("['psutil-kafka-topic','localhost','5555','localhost:2181']")
     }
 
     dependencies {
@@ -89,7 +89,7 @@ project (':psutil') {
     }
 
     task runPython(type:Exec) {
-        commandLine '/usr/bin/python', "$rootDir/psutil/src/main/python/psutil_producer_test.py"
+        commandLine 'sudo', "docker", "run", "--link", "broker1:localhost", "--rm", "-v", "$rootDir/psutil/src/main/python:/psutil", "stealthly/docker-python", "python", "/psutil/psutil_producer_test.py"
     }
 
     test.dependsOn runPython
