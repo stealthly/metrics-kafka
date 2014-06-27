@@ -34,14 +34,11 @@ bin/kafka-console-producer.sh --broker-list localhost:9092 --topic <get his from
 
 bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic <get his from the random topic created in test> --from-beginning
 
-http://192.168.86.5:4567/#Riemann
-./gradlew :psutil:installDependencies
-./gradlew :metrics-client:run
 
-Kafka Yammer Metrics reporting
-==============================
+Kafka Yammer Metrics reporting for Kafka 
+=========================================
 
-In order to assemble jar for metrics yammer do the following steps:
-1) ./gradlew :metrics-yammer:jar
-2) put the jar from metrics-yammer/build/libs to libs dir in root kafka folder
-3) add "kafka.metrics.reporters=ly.stealth.kafka.metrics.KafkaBrokerReporter" to config/server.properties in kafka root folder
+In order to assemble jar for metrics yammer do the following steps:    
+1) ./gradlew :metrics-yammer:jar    
+2) put the jar from metrics-yammer/build/libs to libs dir in root kafka folder    
+3) add "kafka.metrics.reporters=ly.stealth.kafka.metrics.KafkaBrokerReporter" to config/server.properties in kafka root folder    
