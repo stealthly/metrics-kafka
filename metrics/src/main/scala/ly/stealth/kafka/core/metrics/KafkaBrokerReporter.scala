@@ -6,12 +6,12 @@ import java.util.concurrent.TimeUnit
 import kafka.producer.{ProducerConfig}
 import kafka.metrics.{KafkaMetricsConfig, KafkaMetricsReporter, KafkaMetricsReporterMBean}
 
-private trait KafkaTopicReporterMBean extends KafkaMetricsReporterMBean
+private trait KafkaBrokerReporterMBean extends KafkaMetricsReporterMBean
 
 
 private class KafkaBrokerReporter extends KafkaMetricsReporter
-                                              with KafkaTopicReporterMBean
-                                              with Logging {
+                                          with KafkaBrokerReporterMBean
+                                          with Logging {
   private var underlying: TopicReporter = null
   private var props: VerifiableProperties = null
   private var running = false
