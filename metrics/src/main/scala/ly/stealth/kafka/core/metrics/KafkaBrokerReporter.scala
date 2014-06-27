@@ -25,7 +25,7 @@ private class KafkaBrokerReporter extends KafkaMetricsReporter
     synchronized {
                    if (!initialized) {
                      this.props = props
-                     props.props.put("metadata.broker.list", "%s:%d".format("localhost", props.getInt("port")))
+                     props.props.put("metadata.broker.list", "%s:%s".format("localhost", props.props.getProperty("port")))
                      val metricsConfig = new KafkaMetricsConfig(props)
 
                      this.underlying = new TopicReporter(Metrics.defaultRegistry(), new ProducerConfig(props.props), "broker%s".format(props.getString("broker.id")))
