@@ -10,6 +10,8 @@ subprojects {
 }
 
 project (':metrics') {
+    apply plugin:'scala'
+
     test {
         doFirst {
             file('target').mkdirs();
