@@ -15,33 +15,20 @@ Use Vagrant to get up and running.
 
 In the main metrics-kafka folder
 
-1) sudo ./bootstrap.sh
-2) ./gradlew test
-3) sudo ./shutdown.sh
+    vagrant up --provider=virtualbox
+    vagrant ssh
+    cd /vagrant 
+    sudo ./bootstrap.sh 
+    ./gradlew test
+    ./gradlew :psutil:installDependencies
+    ./gradlew :metrics-test:run
+    python psutil/src/main/python/psutil_producer.py --url=localhost:9092 --topic=psutil-kafka-topic --reportInterval=3
 
-once this is done
-* Zookeeper will be running localhost:2181
-* Broker 1 on localhost:9092
-* Riemann on localhost:5555
-* Riemann dash on localhost:4567
-* All the tests in metrics/src/test/java/* and riemann/src/test/scala/* should pass
-
-You can access the brokers, zookeeper, riemann and riemann-dash by their IP from your local without having to go into vm.
-
-e.g.
-
-bin/kafka-console-producer.sh --broker-list localhost:9092 --topic <get his from the random topic created in test>
-
-bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic <get his from the random topic created in test> --from-beginning
-
-http://192.168.86.5:4567/#Riemann
-./gradlew :psutil:installDependencies
-./gradlew :metrics-test:run
 
 Kafka Yammer Metrics reporting
 ==============================
 
-In order to assemble jar for metrics yammer do the following steps:
-1) ./gradlew :yammer:jar
-2) put the jar from metrics-yammer/build/libs to libs dir in root kafka folder
-3) add "kafka.metrics.reporters=ly.stealth.kafka.metrics.KafkaBrokerReporter" to config/server.properties in kafka root folder
+In order to assemble jar for metrics yammer do the following steps:    
+1) ./gradlew :yammer:jar    
+2) put the jar from metrics-yammer/build/libs to libs dir in root kafka folder    
+3) add "kafka.metrics.reporters=ly.stealth.kafka.metrics.KafkaBrokerReporter" to config/server.properties in kafka root folder    
