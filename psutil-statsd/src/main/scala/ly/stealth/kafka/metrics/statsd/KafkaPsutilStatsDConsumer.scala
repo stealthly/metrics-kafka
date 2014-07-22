@@ -95,10 +95,11 @@ class KafkaPsutilStatsDConsumer(actorContext: ActorContext = null,
             }
           } catch {
             case e: Throwable =>
-              warn("Error processing message, skipping this message: ", e)
               if (stopped.get()) {
                 info("consumer worker has been stoppped")
                 return
+              } else {
+                warn("Error processing message, skipping this message: ", e)
               }
           }
         }
