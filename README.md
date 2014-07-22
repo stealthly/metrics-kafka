@@ -10,7 +10,7 @@ Quick up and running
 
 Use Vagrant to get up and running.
 
-1) Install Docker [http://docs.docker.com/installation/](http://docs.docker.com/installation/)
+1) Install Docker [http://docs.docker.com/installation/](http://docs.docker.com/installation/)    
 2) Install Virtual Box [https://www.virtualbox.org/](https://www.virtualbox.org/)
 
 In the main metrics-kafka folder
