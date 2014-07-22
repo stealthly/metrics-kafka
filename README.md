@@ -22,8 +22,14 @@ In the main metrics-kafka folder
     ./gradlew test
     ./gradlew :psutil:installDependencies
     ./gradlew :metrics-test:run
+
+At this point you will have the psutils consumer running to push to statsd. Now you need to produce data to the topic.  In another terminal window.
+
+    vagrant ssh
+    cd /vagrant
     python psutil/src/main/python/psutil_producer.py --url=localhost:9092 --topic=psutil-kafka-topic --reportInterval=3
 
+Now open your browser to http://192.168.86.5/ and add a chart for the stats->guages->* and set autorefresh in the dashboard and watch the stats role along.
 
 Kafka Yammer Metrics reporting
 ==============================
