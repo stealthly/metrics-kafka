@@ -17,3 +17,4 @@ export START_RIEMANN_SCRIPT=https://raw2.github.com/stealthly/docker-riemann/mas
 curl -Ls $START_RIEMANN_SCRIPT | bash /dev/stdin localhost
 
 sudo docker run --name psutil --link broker1:localhost -d -v $(pwd)/psutil/src/main/python:/psutil stealthly/docker-python python /psutil/psutil_producer.py --topic psutil-kafka-topic --url localhost:9092
+sudo docker run -d -v /etc/localtime:/etc/localtime:ro --net=host --name kamon-grafana-dashboard kamon/grafana_graphite
