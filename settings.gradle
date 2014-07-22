@@ -1,1 +1,2 @@
-include ':metrics', ':riemann', ':psutil', ':metrics-client', ':metrics-yammer'
+include ':codahale', ':riemann', ':psutil', ':metrics-test', ':yammer', ':statsd', ':graphite', ':psutil-entities', ':psutil-statsd'
+

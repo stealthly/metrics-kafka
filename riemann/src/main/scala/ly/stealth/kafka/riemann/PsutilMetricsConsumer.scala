@@ -1,6 +1,6 @@
 package ly.stealth.kafka.riemann
 
-import ly.stealth.kafka.riemann.entities.PsutilsReport
+import ly.stealth.psutil.entities.PsutilsReport
 
 class PsutilMetricsConsumer(riemannHost: String,
                              riemannPort: Integer,

@@ -9,7 +9,7 @@ subprojects {
     }
 }
 
-project (':metrics') {
+project (':codahale') {
     apply plugin:'scala'
 
     test {
@@ -32,6 +32,7 @@ project (':metrics') {
         compile 'org.slf4j:slf4j-log4j12:1.7.7'
         compile 'com.codahale.metrics:metrics-core:3.0.1'
         compile 'com.codahale.metrics:metrics-json:3.0.1'
+        compile project(':graphite')
 
         testCompile 'junit:junit:4.11'
         testCompile 'org.jbehave.site:jbehave-site-resources:3.1.1'
@@ -40,7 +41,7 @@ project (':metrics') {
     }
 }
 
-project (':metrics-yammer') {
+project (':yammer') {
 
     dependencies {
         compile 'org.apache.kafka:kafka_2.10:0.8.1'
@@ -71,7 +72,8 @@ project (':riemann') {
     test.dependsOn ":psutil:test"
 
     dependencies {
-        compile project(':metrics')
+        compile project(':codahale')
+        compile project(':psutil-entities')
         compile 'org.scala-lang:scala-library:2.10.3'
         compile 'net.benmur:riemann-scala-client_2.10:0.3.1'
 
@@ -79,7 +81,7 @@ project (':riemann') {
     }
 }
 
-project (':metrics-client') {
+project (':metrics-test') {
     apply plugin: 'scala'
     apply plugin: 'application'
 
@@ -92,6 +94,7 @@ project (':metrics-client') {
     dependencies {
         compile project(":riemann")
         compile project(":psutil")
+        compile project(":psutil-statsd")
     }
 }
 
@@ -110,4 +113,55 @@ project (':psutil') {
     }
 
     test.dependsOn runPython
+}
+
+project (':psutil-entities') {
+    apply plugin:'scala'
+
+    dependencies {
+        compile 'org.apache.kafka:kafka_2.10:0.8.1'
+        compile 'com.fasterxml.jackson.core:jackson-core:2.4.1'
+        compile 'com.fasterxml.jackson.core:jackson-annotations:2.4.1'
+        compile 'com.fasterxml.jackson.core:jackson-databind:2.4.1'
+        compile 'org.slf4j:slf4j-log4j12:1.7.7'
+    }
+}
+
+project (':psutil-statsd') {
+    apply plugin:'scala'
+
+    dependencies {
+        compile 'org.apache.kafka:kafka_2.10:0.8.1'
+        compile 'com.fasterxml.jackson.core:jackson-annotations:2.4.1'
+        compile 'org.slf4j:slf4j-log4j12:1.7.7'
+
+        compile project(':statsd')
+        compile project(':psutil-entities')
+    }
+}
+
+project (':statsd') {
+    apply plugin:'scala'
+
+    dependencies {
+        compile 'org.apache.kafka:kafka_2.10:0.8.1'
+        compile 'org.slf4j:slf4j-log4j12:1.7.7'
+        compile group: 'com.typesafe.akka', name: 'akka-actor_2.10', version: '2.3.4'
+
+        testCompile 'junit:junit:4.11'
+    }
+}
+
+project (':graphite') {
+    apply plugin:'scala'
+
+    dependencies {
+        compile 'org.apache.kafka:kafka_2.10:0.8.1'
+        compile 'org.slf4j:slf4j-log4j12:1.7.7'
+
+        testCompile 'junit:junit:4.11'
+        testCompile 'org.jbehave.site:jbehave-site-resources:3.1.1'
+        testCompile 'de.codecentric:jbehave-junit-runner:1.0.1'
+        testCompile 'org.jbehave:jbehave-core:3.8'
+    }
 }
