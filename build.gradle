@@ -28,11 +28,11 @@ subprojects {
                     name project.name
                     packaging 'jar'
                     url 'http://github.com/stealthly/metrics-kafka'
-                    description 'Quick up and running using Scala for Apache Kafka'
+                    description 'Metrics produced to Kafka and consumers for monitoring them'
                     scm {
-                        url 'http://github.com/stealthly/scala-kafka'
-                        connection 'scm:https://github.com/stealthly/scala-kafka'
-                        developerConnection 'scm:git:git://github.com/stealthly/scala-kafka'
+                        url 'http://github.com/stealthly/metrics-kafka'
+                        connection 'scm:https://github.com/stealthly/metrics-kafka'
+                        developerConnection 'scm:git:git://github.com/stealthly/metrics-kafka'
                     }
                     licenses {
                         license {
