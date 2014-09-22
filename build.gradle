@@ -1,5 +1,14 @@
+ext {
+    gradleVersion = "2.0"
+    mavenRepoUrl = ""
+    mavenUser = ""
+    mavenPassword = ""
+}
+
 subprojects {
     apply plugin:'java'
+    apply plugin: "maven"
+    apply plugin: "signing"
 
     version = "0.1"
 
@@ -10,7 +19,10 @@ subprojects {
         }
     }
 
-    apply from: "maven.gradle"
+    configurations {
+        deployerJars
+    }
+
     uploadArchives {
         signing {
             sign configurations.archives
@@ -25,6 +37,10 @@ subprojects {
                 }
             }
         }
+    }
+
+    dependencies {
+        deployerJars "org.apache.maven.wagon:wagon-http:2.2"
     }
 }
 
