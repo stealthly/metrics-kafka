@@ -1,7 +1,7 @@
 ext {
     gradleVersion = "2.0"
-    mavenRepoUrl = ""
-    mavenUser = ""
+    mavenURL = ""
+    mavenUsername = ""
     mavenPassword = ""
 }
 
@@ -32,8 +32,8 @@ subprojects {
                 pom.artifactId = project.name
                 pom.version = version
                 configuration = configurations.deployerJars
-                repository(url: "${mavenRepoUrl}") {
-                    authentication(userName: "${mavenUser}", password: "${mavenPassword}")
+                repository(url: "${mavenURL}") {
+                    authentication(userName: "${mavenUsername}", password: "${mavenPassword}")
                 }
             }
         }
