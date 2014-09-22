@@ -31,6 +31,18 @@ subprojects {
                 pom.groupId = 'ly.stealth'
                 pom.artifactId = project.name
                 pom.version = version
+                pom.project {
+                    name project.name
+                    packaging 'jar'
+                    url 'http://github.com/stealthly/metrics-kafka'
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            distribution 'repo'
+                        }
+                    }
+                }
                 configuration = configurations.deployerJars
                 repository(url: "${mavenURL}") {
                     authentication(userName: "${mavenUsername}", password: "${mavenPassword}")
@@ -41,6 +53,27 @@ subprojects {
 
     dependencies {
         deployerJars "org.apache.maven.wagon:wagon-http:2.2"
+    }
+}
+
+tasks.withType(Javadoc) {
+    task srcJar(type:Jar) {
+        classifier = 'sources'
+        from '../LICENSE'
+        from sourceSets.main.java
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier 'javadoc'
+        from '../LICENSE'
+        from javadoc.destinationDir
+    }
+
+    task docsJar(type: Jar, dependsOn: javadocJar) { }
+
+    artifacts {
+        archives srcJar
+        archives javadocJar
     }
 }
 
