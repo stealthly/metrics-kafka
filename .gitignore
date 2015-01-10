@@ -1,3 +1,5 @@
+*/build/*
+codahale/*
 .gradle
 metrics/build
 metrics/logs

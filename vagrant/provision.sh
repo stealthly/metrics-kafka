@@ -12,26 +12,29 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
 
-# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
-VAGRANTFILE_API_VERSION = "2"
+#!/bin/sh -Eux
 
-Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "precise64"
+#  Trap non-normal exit signals: 1/HUP, 2/INT, 3/QUIT, 15/TERM, ERR
+trap founderror 1 2 3 15 ERR
 
-  # The url from where the 'config.vm.box' box will be fetched if it
-  # doesn't already exist on the user's system.
-  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+founderror()
+{
+        exit 1
+}
 
-  config.vm.define "trm" do |trm|
-    trm.vm.provision "docker", images: ["ubuntu"]
-    trm.vm.network :private_network, ip: "192.168.86.5"
-    trm.vm.provider :virtualbox do |vb|
-      vb.customize ["modifyvm", :id, "--memory", "2048"]
-    end
-    trm.vm.provision "shell", path: "vagrant/provision.sh"
-  end
+exitscript()
+{
+        #remove lock file
+        #rm $lockfile
+        exit 0
+}
 
-end
+apt-get -y update
+apt-get install -y software-properties-common python-software-properties
+add-apt-repository -y ppa:webupd8team/java
+apt-get -y update
+/bin/echo debconf shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+apt-get -y install oracle-java7-installer oracle-java7-set-default
+
+exitscript

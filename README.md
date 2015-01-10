@@ -15,9 +15,9 @@ Use Vagrant to get up and running.
 
 In the main metrics-kafka folder
 
-1) sudo ./bootstrap.sh
-2) ./gradlew test
-3) sudo ./shutdown.sh
+1) sudo ./bootstrap.sh    
+2) ./gradlew test    
+3) sudo ./shutdown.sh    
 
 once this is done
 * Zookeeper will be running localhost:2181
@@ -41,7 +41,7 @@ http://192.168.86.5:4567/#Riemann
 Kafka Yammer Metrics reporting
 ==============================
 
-In order to assemble jar for metrics yammer do the following steps:
-1) ./gradlew :yammer:jar
-2) put the jar from metrics-yammer/build/libs to libs dir in root kafka folder
-3) add "kafka.metrics.reporters=ly.stealth.kafka.metrics.KafkaBrokerReporter" to config/server.properties in kafka root folder
+In order to assemble jar for metrics yammer do the following steps:    
+1) ./gradlew :yammer:jar    
+2) put the jar from metrics-yammer/build/libs to libs dir in root kafka folder    
+3) add "kafka.metrics.reporters=ly.stealth.kafka.metrics.KafkaBrokerReporter" to config/server.properties in kafka root folder    
